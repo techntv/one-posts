@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>One Times - Post Article</title>
+  <link href="https://fonts.googleapis.com/css?family=Raleway|Merriweather" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="./css/site.css">
+  <!-- Adress bar styling -->
+  <meta name="theme-color" content="#FFD700">
+  <meta name="msapplication-navbutton-color" content="#FFD700">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="./manifest.json">
+</head>
+
+<body>
+  <div id="offline"></div>
+  <div id="message"></div>
+  <!-- header -->
+  <div id="header">
+    <img id="logo" src="./images/newspaper.svg" />
+    <h1>One Times</h1>
+    <br>
+
+  </div>
+  <div id="container">
+    <h2>Add post</h2>
+    <!-- contact form -->
+    <div class="contact-form">
+      <input type="text" id="name" name="name" placeholder="Title">
+      <br>
+
+      <textarea type="text" id="messagetext" name="message" placeholder="Description"></textarea>
+
+      <br>
+      <button id="submit">Add</button>
+    </div>
+    <div class="message-list">
+
+    </div>
+  </div>
+  <script src="/js/idb-keyval.js"></script>
+  <script src="/js/contact.js"></script>
+  <script>
+    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(registration => navigator.serviceWorker.ready)
+        .then(registration => {
+          document.getElementById('submit').addEventListener('click', () => {
+            sendPost().then(displayMessageNotification('Post sent')).catch(e => {
+              registration.sync.register('sendPost').then(() => {
+                queueMessage();
+                displayMessageNotification('Post queued');
+              });
+            })
+          });
+        });
+    } else {
+      document.getElementById('submit').addEventListener('click', () => {
+        console.log('click submit button');
+        sendPost()
+          .then(displayMessageNotification('Post sent'))
+          .catch(err => {
+            displayMessageNotification('Post failed')
+          });
+      });
+    }
+  </script>
+</body>
+
+</html>
