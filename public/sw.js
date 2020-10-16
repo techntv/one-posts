@@ -97,7 +97,7 @@ self.addEventListener('sync', function (event) {
   if (event.tag === 'sendPost') {
     event.waitUntil(
       idbKeyval.get('sendPost').then(value =>
-        fetch('/sendPost/', {
+        fetch('/sendPost', {
           method: 'POST',
           headers: new Headers({ 'content-type': 'application/json' }),
           body: JSON.stringify(value)

@@ -25,7 +25,7 @@ function displayMessageNotification(notificationText){
 }
 
 // Get all message
-function getMessages(){
+function getPosts(){
   console.log('get message');
 
   // Send the POST request to the server
@@ -36,7 +36,10 @@ function getMessages(){
     })
   }).then(response => response.json()).then(data => {
     console.log(data)
+    messagesList = messagesList.concat(data)
+    console.log(messagesList)
     renderListData(data)
+    
   });
 }
 
@@ -50,13 +53,13 @@ function sendPost(){
   };
   messagesList.push(payload)
   renderListData(messagesList)
-  return fetch('/sendPost/', {
-    method: 'post',
+  return fetch('/sendPost', {
+    method: 'POST',
     headers: new Headers({
       'content-type': 'application/json'
     }),
     body: JSON.stringify(payload)
-  }).then(() => getMessages());
+  }).then(() => getPosts());
 }
 
 function renderListData(data) {
@@ -78,13 +81,13 @@ function queueMessage(){
     title: document.getElementById('name').value,
     description: document.getElementById('messagetext').value,
   };
-
+  console.log('messagesList',messagesList)
   // Save to indexdb
-  idbKeyval.set('sendPost', payload);
+  idbKeyval.set('sendPost', messagesList);
 }
 
 // Update the online status icon based on connectivity
 window.addEventListener('online',  hideIndicator);
 window.addEventListener('offline', showIndicator);
 
-getMessages()
+getPosts()

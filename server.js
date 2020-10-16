@@ -62,7 +62,7 @@ app.get('/offline', function (req, res) {
 // Send a post
 app.post('/sendPost', function (req, res) {
   console.log(req.body)
-  posts.push(req.body)
+  posts = req.body
   res.json(`Post has title ${req.body.title}`);
 });
 
@@ -72,6 +72,6 @@ app.get('/posts', function (req, res) {
 });
 
 // The server
-app.listen(3111, function () {
-  console.log('Web app listening on port 3111')
+app.listen(process.env.PORT || 3111, function () {
+  console.log('Web app is listening')
 });
