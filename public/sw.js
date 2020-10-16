@@ -104,7 +104,7 @@ self.addEventListener('sync', function (event) {
         })));
 
         // Remove the value from the DB
-        idbKeyval.delete('sendPost');
+        // idbKeyval.delete('sendPost');
     }
 });
 
